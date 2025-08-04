@@ -1,28 +1,8 @@
 from question_model import Question
+from data import question_data
 from quiz_brain import QuizBrain
-import requests
 
 
-# constants, vars
-
-
-TRIVIA_API = "https://opentdb.com/api.php"
-
-
-# main code
-
-
-def get_question_data():
-    parameters = {
-        "amount": 10,
-        "type": "boolean",
-    }
-    response = requests.get(TRIVIA_API, parameters)
-    response.raise_for_status()
-    return response.json()["results"]
-
-
-question_data = get_question_data()
 question_bank = []
 for question in question_data:
     question_text = question["question"]
