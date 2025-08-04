@@ -8,17 +8,26 @@ class QuizInterface:
     def __init__(self):
         self.window = Tk()
         self.window.title("Quizzler")
-        self.window.config(padx=20, pady=20)
+        self.window.config(padx=20, pady=20, bg=THEME_COLOR)
 
         # UI
 
-        score = Label(text="Score: 0")
-        score.grid(column=1, row=0, columnspan=2)
+        self.score_label = Label(text="Score: 0", fg="white", bg=THEME_COLOR)
+        self.score_label.grid(column=1, row=0, columnspan=2)
 
-        canvas = Canvas(width=300, height=250, bg="white")
-        canvas.grid(column=1, row=1)
+        self.canvas = Canvas(width=300, height=250, bg="white")
+        self.canvas.grid(column=0, row=1, columnspan=2, pady=50)
 
-        question_text = canvas.create_text(150, 125, width=100, text="This is a Question", font=("Arial", 20, "italic"))
+        self.question_text = self.canvas.create_text(150, 125, width=250, text="This is a Question", font=("Arial", 12, "italic"))
+
+        img_yes = PhotoImage(file="./images/true.png")
+        self.button_yes = Button(image=img_yes, highlightthickness=0, relief="flat", border=0)
+        self.button_yes.grid(column=0, row=2)
+
+        img_no = PhotoImage(file="./images/false.png")
+        self.button_no = Button(image=img_no, highlightthickness=0, relief="flat", border=0)
+        self.button_no.grid(column=1, row=2)
 
 
         self.window.mainloop()
+ 
