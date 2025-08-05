@@ -26,21 +26,27 @@ class QuizInterface:
         self.question_text = self.canvas.create_text(150, 125, width=250, text="This is a Question", font=("Arial", 15, "bold italic"), fill=THEME_COLOR)
 
         img_yes = PhotoImage(file="./images/true.png")
-        self.button_yes = Button(image=img_yes, highlightthickness=0, relief="flat", border=0, command=self.true_pressed)
-        self.button_yes.grid(column=0, row=2)
+        self.true_button = Button(image=img_yes, highlightthickness=0, relief="flat", border=0, command=self.true_pressed)
+        self.true_button.grid(column=0, row=2)
 
         img_no = PhotoImage(file="./images/false.png")
-        self.button_no = Button(image=img_no, highlightthickness=0, relief="flat", border=0, command=self.false_pressed)
-        self.button_no.grid(column=1, row=2)
+        self.false_button = Button(image=img_no, highlightthickness=0, relief="flat", border=0, command=self.false_pressed)
+        self.false_button.grid(column=1, row=2)
 
         self.get_next_question()
 
         self.window.mainloop()
 
     def get_next_question(self):
-        q_text = self.quiz.next_question()
-        self.canvas.itemconfig(self.question_text, text=q_text)
         self.reset_canvas()
+        if self.quiz.still_has_questions():
+            q_text = self.quiz.next_question()
+            self.canvas.itemconfig(self.question_text, text=q_text)            
+            self.update_score()
+        else:
+            self.canvas.itemconfig(self.question_text, text="You've reach the end of the Quiz.", font=("Arial", 24, "bold italic"))
+            self.true_button.config(state="disabled")
+            self.false_button.config(state="disabled")
 
     def true_pressed(self):
         is_right = self.quiz.check_answer(str(True))
@@ -65,3 +71,6 @@ class QuizInterface:
     def reset_canvas(self):
         self.canvas.config(bg="white")
         self.canvas.itemconfig(self.question_text, fill=THEME_COLOR)
+
+    def update_score(self):
+        self.score_label.config(text=f"Score: {self.quiz.score}")
